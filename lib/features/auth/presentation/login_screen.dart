@@ -1,4 +1,7 @@
+import 'package:firebase_project/features/auth/cubit/auth_cubit.dart';
+import 'package:firebase_project/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/arrow_back_icon.dart';
@@ -17,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   bool isVisible = false;
+
   @override
   void dispose() {
     emailController.dispose();
@@ -90,7 +94,27 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 30),
 
-              AppButton(title: "Login", onTap: () {}),
+              BlocListener<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if(state is AuthLoadingState){
+                     Center(child: CircularProgressIndicator(),);
+                  }else if(state is AuthSuccessState){
+                    Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen()));
+                    
+                  }else{
+                    Center(child: Text("Erorrr"),);
+                  }
+                },
+                child: AppButton(
+                  title: "Login",
+                  onTap: () {
+                    context.read<AuthCubit>().loginWithEmailAndPassword(
+                      emailAddress: emailController.text,
+                      password: passwordController.text,
+                    );
+                  },
+                ),
+              ),
 
               SizedBox(height: 34),
               Center(

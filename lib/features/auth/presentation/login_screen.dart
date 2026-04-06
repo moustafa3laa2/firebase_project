@@ -59,23 +59,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.all(12),
                   child: isVisible
                       ? IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isVisible = false;
-                            });
-                          },
-                          icon: Icon(Icons.remove_red_eye_outlined),
-                        )
+                    onPressed: () {
+                      setState(() {
+                        isVisible = false;
+                      });
+                    },
+                    icon: Icon(Icons.remove_red_eye_outlined),
+                  )
                       : InkWell(
-                          onTap: () {
-                            setState(() {
-                              isVisible = true;
-                            });
-                          },
-                          child: SvgPicture.asset(
-                            "assets/icons/hidepassword.svg",
-                          ),
-                        ),
+                    onTap: () {
+                      setState(() {
+                        isVisible = true;
+                      });
+                    },
+                    child: SvgPicture.asset(
+                      "assets/icons/hidepassword.svg",
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 13),
@@ -93,16 +93,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               SizedBox(height: 30),
-
               BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
-                  if(state is AuthLoadingState){
-                     Center(child: CircularProgressIndicator(),);
-                  }else if(state is AuthSuccessState){
-                    Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreen()));
-                    
-                  }else{
-                    Center(child: Text("Erorrr"),);
+                  if (state is AuthLoadingState) {
+                    Center(child: CircularProgressIndicator());
+                  } else if (state is AuthSuccessState) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  } else {
+                    Center(child: Text("Erorrr"));
                   }
                 },
                 child: AppButton(
@@ -115,7 +116,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
               ),
-
               SizedBox(height: 34),
               Center(
                 child: Text(
@@ -127,9 +127,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 21),
-              SignInWithCard(
-                title: "SignIn With Google",
-                image: "assets/icons/google.svg",
+              BlocListener<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                },
+                child: SignInWithCard(
+                  onTap: () {context.read<AuthCubit>().signInWithGoogle();},
+                  title: "SignIn With Google",
+                  image: "assets/icons/google.svg",
+                ),
               ),
               SizedBox(height: 34),
               SignInWithCard(
